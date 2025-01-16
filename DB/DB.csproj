@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DAL\DAL.csproj" />
+      <ProjectReference Include="..\IPCA\IPCA.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FCM.Admin" Version="1.0.0" />
+      <PackageReference Include="FirebaseAdmin" Version="2.3.0" />
+      <PackageReference Include="Google.Apis.Auth" Version="1.58.0" />
+      <PackageReference Include="Grpc.Core.Api" Version="2.51.0-pre1" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
+      <PackageReference Include="MSTest.TestFramework" Version="3.0.0" />
+      <PackageReference Include="Npgsql" Version="7.0.1" />
+      <PackageReference Include="NUnit" Version="3.13.3" />
+      <PackageReference Include="System.ServiceModel.Duplex" Version="4.8.*" />
+      <PackageReference Include="System.ServiceModel.Federation" Version="4.8.*" />
+      <PackageReference Include="System.ServiceModel.Http" Version="4.8.*" />
+      <PackageReference Include="System.ServiceModel.NetTcp" Version="4.8.*" />
+      <PackageReference Include="System.ServiceModel.Security" Version="4.8.*" />
+    </ItemGroup>
+
+</Project>

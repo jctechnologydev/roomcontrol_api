@@ -1,0 +1,165 @@
+--Criar base dados
+
+CREATE DATABASE smartrooms
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+
+-- State
+
+CREATE TABLE public."State"
+(
+    "idState" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( START 1 MINVALUE 1 ),
+    name character varying NOT NULL,
+    PRIMARY KEY ("idState")
+);
+
+ALTER TABLE IF EXISTS public."State"
+    OWNER to postgres;
+
+-- HardwareType
+
+CREATE TABLE public."HardwareType"
+(
+    "idHardwareType" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( START 1 MINVALUE 1 ),
+    name character varying NOT NULL,
+    PRIMARY KEY ("idHardwareType")
+);
+
+ALTER TABLE IF EXISTS public."HardwareType"
+    OWNER to postgres;
+
+-- FuncionalityType
+
+CREATE TABLE public."FuncionalityType"
+(
+    "idFuncionality" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( START 1 MINVALUE 1 ),
+    name character varying NOT NULL,
+    PRIMARY KEY ("idFuncionality")
+);
+
+ALTER TABLE IF EXISTS public."FuncionalityType"
+    OWNER to postgres;
+
+
+-- DataType
+
+CREATE TABLE public."DataType"
+(
+    "idDataType" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( START 1 MINVALUE 1 ),
+    name character varying NOT NULL,
+    PRIMARY KEY ("idDataType")
+);
+
+ALTER TABLE IF EXISTS public."DataType"
+    OWNER to postgres;
+
+-- Hardware
+
+CREATE TABLE public."Hardware"
+(
+    "idHardware" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( START 1 MINVALUE 1 ),
+    "HardwareTypeidHardwareType" integer NOT NULL,
+    "FuncionalityTypeidFunctionality" integer NOT NULL,
+    name character varying NOT NULL,
+    PRIMARY KEY ("idHardware"),
+    CONSTRAINT "functionalityType" FOREIGN KEY ("FuncionalityTypeidFunctionality")
+        REFERENCES public."FuncionalityType" ("idFuncionality") MATCH FULL
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+        NOT VALID,
+    CONSTRAINT "hardwareType" FOREIGN KEY ("HardwareTypeidHardwareType")
+        REFERENCES public."HardwareType" ("idHardwareType") MATCH FULL
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+        NOT VALID
+);
+
+ALTER TABLE IF EXISTS public."Hardware"
+    OWNER to postgres;
+
+-- StateHistoric
+
+CREATE TABLE public."StateHistoric"
+(
+    "registrationDate" date NOT NULL,
+    "HardwareidHardware" integer NOT NULL,
+    "StateidState" integer NOT NULL,
+    PRIMARY KEY ("registrationDate", "HardwareidHardware"),
+    CONSTRAINT "idHardware" FOREIGN KEY ("HardwareidHardware")
+        REFERENCES public."Hardware" ("idHardware") MATCH FULL
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+        NOT VALID,
+    CONSTRAINT "idState" FOREIGN KEY ("StateidState")
+        REFERENCES public."State" ("idState") MATCH FULL
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+        NOT VALID
+);
+
+ALTER TABLE IF EXISTS public."StateHistoric"
+    OWNER to postgres;
+
+-- InstallationHistoric
+
+CREATE TABLE public."InstallationHistoric"
+(
+    "HardwareidHardware" integer NOT NULL,
+    "idRoom" integer NOT NULL,
+    "registrationDate" date NOT NULL,
+    "idUser" integer NOT NULL,
+    PRIMARY KEY ("HardwareidHardware", "idRoom", "registrationDate", "idUser"),
+    CONSTRAINT "idHardware" FOREIGN KEY ("HardwareidHardware")
+        REFERENCES public."Hardware" ("idHardware") MATCH FULL
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+        NOT VALID
+);
+
+ALTER TABLE IF EXISTS public."InstallationHistoric"
+    OWNER to postgres;
+
+-- Alert
+
+CREATE TABLE public."Alert"
+(
+    "HardwareidHardware" integer NOT NULL,
+    "maxValue" integer NOT NULL,
+    "minValue" integer NOT NULL,
+    PRIMARY KEY ("HardwareidHardware", "maxValue", "minValue"),
+    CONSTRAINT "idHardware" FOREIGN KEY ("HardwareidHardware")
+        REFERENCES public."Hardware" ("idHardware") MATCH FULL
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+        NOT VALID
+);
+
+ALTER TABLE IF EXISTS public."Alert"
+    OWNER to postgres;
+
+-- Data
+
+CREATE TABLE public."Data"
+(
+    "idData" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( START 1 MINVALUE 1 ),
+    "HardwareidHardware" integer NOT NULL,
+    "idDataType" integer NOT NULL,
+    value character varying NOT NULL,
+    "registrationDate" date NOT NULL,
+    CONSTRAINT "idHardware" FOREIGN KEY ("HardwareidHardware")
+        REFERENCES public."Hardware" ("idHardware") MATCH FULL
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+        NOT VALID,
+    CONSTRAINT "idDataType" FOREIGN KEY ("idDataType")
+        REFERENCES public."DataType" ("idDataType") MATCH FULL
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+        NOT VALID
+);
+
+ALTER TABLE IF EXISTS public."Data"
+    OWNER to postgres;
